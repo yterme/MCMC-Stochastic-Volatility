@@ -1,4 +1,4 @@
-setwd("~/CoursENSAE/MonteCarlo/")
+setwd("~/CoursENSAE/MonteCarlo/MCMC-Stochastic-Volatility/")
 
 source("simulate_xy.R")
 
@@ -23,9 +23,9 @@ simulate_mu <- function(x,phi,sigma){
     mu_proposal=rnorm(mean=mu,sd=sd_mu_kernel,n=1)
   
     # calcul P(x| mu,sigma,phi)
-    p_x=calcul_px(x,mu,sigma,phi)
+    p_x=log_px(x,mu,sigma,phi)
     # Calcul de P(x|mu,sigma,phi)
-    p_x_proposal=calcul_px(x,mu_proposal,sigma,phi)
+    p_x_proposal=log_px(x,mu_proposal,sigma,phi)
       
     #on a suppose que mu suivait une prior N(0,sigma)
     r=(exp(p_x_proposal)*dnorm(mean = 0,sd =sd_mu_prior, x = mu_proposal))/

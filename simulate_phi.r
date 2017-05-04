@@ -1,4 +1,4 @@
-setwd("~/CoursENSAE/MonteCarlo/")
+setwd("~/CoursENSAE/MonteCarlo/MCMC-Stochastic-Volatility/")
 source("simulate_xy.R")
 
 library(truncnorm)
@@ -67,4 +67,4 @@ log_px= function(x,mu,sigma,phi){
   return(p_x)
 }
 
-#simulate_phi(x,mu,sigma)
+simulate_phi(x,mu,sigma)

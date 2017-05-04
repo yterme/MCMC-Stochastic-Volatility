@@ -1,3 +1,5 @@
+setwd("~/CoursENSAE/MonteCarlo/MCMC-Stochastic-Volatility/")
+
 library(truncnorm)
 T=100
 y=rnorm(T)

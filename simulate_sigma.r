@@ -1,4 +1,4 @@
-setwd("~/CoursENSAE/MonteCarlo/")
+setwd("~/CoursENSAE/MonteCarlo/MCMC-Stochastic-Volatility/")
 
 source("simulate_xy.R")
 
@@ -13,10 +13,9 @@ n=10000
 burn=2500
 mu_trace=rep(0,n-burn)
 
-mean_sigma_kernel=0.1
 mean_sigma_prior= 0.1
-sd_sigma_kernel=sigma
-shape_sigma_prior=sigma
+shape_sigma_kernel=1
+shape_sigma_prior=1
 
 
 
@@ -24,8 +23,8 @@ simulate_sigma <- function(x,mu,phi){
   sigma_trace=rep(0,n-burn)
   sigma=0.1
   for (i in 1:n){
-    # noyau gaussien N(0,1)
-    sigma_proposal=rnorm(mean=sigma,sd=sd_sigma_kernel,n=1)
+    # Simulation selon noyau gaussien N(sigma, variance)
+    sigma_proposal=rinvgauss(mean=sigma,shape=shape_sigma_kernel,n=1)
     
     # calcul P(x| mu,sigma,phi)
     p_x=log_px(x,mu,sigma,phi)
@@ -33,11 +32,11 @@ simulate_sigma <- function(x,mu,phi){
     p_x_proposal=log_px(x,mu,sigma_proposal,phi)
     
     #on a suppose que mu suivait une prior N(0,sigma)
-    r=(exp(p_x_proposal)*dinvgauss(mean = mean_sigma_prior,shape = shape_sigma_prior, x = mu_proposal))/
-      (exp(p_x)*dinvgauss(mean = mean_sigma_prior, shape = shape_sigma_prior, x = mu))
+    r=(exp(p_x_proposal)*dinvgauss(mean = mean_sigma_prior,shape = shape_sigma_prior, x = sigma_proposal))/
+      (exp(p_x)*dinvgauss(mean = mean_sigma_prior, shape = shape_sigma_prior, x = sigma))
     
     alpha=runif(n = 1,min = 0,max = 1)
-    
+
     if (r>alpha){
       if (i>burn){
         sigma_trace[i-burn]=sigma_proposal}
